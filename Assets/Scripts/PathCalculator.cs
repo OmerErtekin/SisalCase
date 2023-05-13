@@ -5,27 +5,42 @@ using UnityEngine;
 public class PathCalculator : MonoBehaviour
 {
     #region Components
+    private PointPool pointPool;
     #endregion
-
     #region Variables
-    [SerializeField] private GameObject pointPrefab;
+    public Transform testTransform;
     [SerializeField] private float pathResolution = 0.25f;
-    [SerializeField] private float maxBounceCount = 6;
+    [SerializeField] private int maxBounceCount = 6;
     [SerializeField] private LayerMask targetMasks;
+    [SerializeField] private int holeLayerIndex;
     private Path calculatedPath;
-    private List<GameObject> points = new();
+    private List<VisiblePoint> drawedPoints = new();
+
+    private Vector3 lastDirection,lastPosition;
+    private float lastDistance;
     #endregion
 
     private void Awake()
     {
+        pointPool = GetComponent<PointPool>();
         calculatedPath = new();
+    }
+
+    private void FixedUpdate()
+    {
+        CalculatePath(testTransform.position, testTransform.forward, 10);
     }
 
     private Path CalculatePath(Vector3 start, Vector3 direction, float targetDistance)
     {
-        ResetPath();
+        if (IsAlreadyCalculated(start, direction, targetDistance)) return calculatedPath;
 
-        Ray ray = new(start, direction);
+        ResetPath();
+        lastPosition = start;
+        lastDirection = direction;
+        lastDistance = targetDistance;
+
+        Ray ray = new(start, direction);    
         float remainingDistance = targetDistance;
 
         for (int i = 0; i < maxBounceCount; i++)
@@ -52,13 +67,10 @@ public class PathCalculator : MonoBehaviour
     private void ResetPath()
     {
         calculatedPath.pathDistance = 0;
-        calculatedPath.pathPoints.Clear();
+        calculatedPath.pathPositions.Clear();
 
-        foreach (var point in points)
-        {
-            Destroy(point);
-        }
-        points.Clear();
+        HideDrawedPath();
+        drawedPoints.Clear();
     }
 
     private float HandleRaycastHit(RaycastHit hit, Ray ray, float remainingDistance)
@@ -71,8 +83,7 @@ public class PathCalculator : MonoBehaviour
 
         float segmentLength = Vector3.Distance(ray.origin, hit.point);
         AddSegmentPoints(ray, hit.point, segmentLength);
-
-        if (hit.transform.gameObject.layer == LayerMask.GetMask("Hole"))
+        if (hit.transform.gameObject.layer == holeLayerIndex)
         {
             return 0;
         }
@@ -101,17 +112,30 @@ public class PathCalculator : MonoBehaviour
         }
     }
 
-    private void AddPointToPath(Vector3 point)
+    private void AddPointToPath(Vector3 pointPosition)
     {
-        calculatedPath.pathPoints.Add(point);
-        points.Add(Instantiate(pointPrefab, point, Quaternion.identity));
+        calculatedPath.pathPositions.Add(pointPosition);
+        var visiblePoint = pointPool.GetPoint();
+        visiblePoint.ShowPoint(pointPosition);
+        drawedPoints.Add(visiblePoint);
     }
 
+    private void HideDrawedPath()
+    {
+        for (int i = 0; i < drawedPoints.Count; i++)
+        {
+            drawedPoints[i].HidePoint();
+        }
+    }
 
+    private bool IsAlreadyCalculated(Vector3 position,Vector3 direction,float distance)
+    {
+        return lastPosition == position && lastDirection == direction && lastDistance == distance;
+    }
 }
 [System.Serializable]
 public class Path
 {
     public float pathDistance;
-    public List<Vector3> pathPoints = new();
+    public List<Vector3> pathPositions = new();
 }

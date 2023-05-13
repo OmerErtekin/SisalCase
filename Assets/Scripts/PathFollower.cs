@@ -44,15 +44,15 @@ public class PathFollower : MonoBehaviour
 
         Vector3 targetDirection;
 
-        for (int i = 0; i < currentPath.pathPoints.Count - 1; i++)
+        for (int i = 0; i < currentPath.pathPositions.Count - 1; i++)
         {
-            while ((transform.position - currentPath.pathPoints[i + 1]).sqrMagnitude > 0.001f)
+            while ((transform.position - currentPath.pathPositions[i + 1]).sqrMagnitude > 0.001f)
             {
 
-                targetDirection = (currentPath.pathPoints[i + 1] - transform.position).normalized;
+                targetDirection = (currentPath.pathPositions[i + 1] - transform.position).normalized;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetDirection), 1080 * Time.deltaTime);
                 currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime));
-                transform.position = Vector3.MoveTowards(transform.position, currentPath.pathPoints[i + 1], currentSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, currentPath.pathPositions[i + 1], currentSpeed * Time.deltaTime);
                 yield return null;
             }
         }

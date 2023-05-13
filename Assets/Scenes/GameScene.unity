@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 110869405}
   - component: {fileID: 110869406}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 'Border '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 236728772}
   - component: {fileID: 236728771}
   - component: {fileID: 236728770}
-  - component: {fileID: 236728769}
   m_Layer: 0
   m_Name: WhiteBall
   m_TagString: Untagged
@@ -187,25 +186,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &236728769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 236728768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0139152ffb17e9a48b5194bb0f69a6ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointPrefab: {fileID: 9211408115512019656, guid: b9851cc8cef801044b92d95f5abef5a6,
-    type: 3}
-  pathResolution: 0.25
-  maxBounceCount: 6
-  targetMasks:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!23 &236728770
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -270,6 +250,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &312382246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 312382249}
+  - component: {fileID: 312382248}
+  - component: {fileID: 312382247}
+  m_Layer: 0
+  m_Name: PathCalculator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &312382247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312382246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48edfabe40ce90649b77fd6d817631ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointPrefab: {fileID: 9211408115512019656, guid: b9851cc8cef801044b92d95f5abef5a6,
+    type: 3}
+  parentTransform: {fileID: 674900099}
+  initialPoolSize: 50
+--- !u!114 &312382248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312382246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0139152ffb17e9a48b5194bb0f69a6ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testTransform: {fileID: 236728772}
+  pathResolution: 0.25
+  maxBounceCount: 6
+  targetMasks:
+    serializedVersion: 2
+    m_Bits: 192
+  holeLayerIndex: 6
+--- !u!4 &312382249
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312382246}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 674900099}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
@@ -514,7 +563,6 @@ GameObject:
   m_Component:
   - component: {fileID: 512901725}
   - component: {fileID: 512901726}
-  - component: {fileID: 512901727}
   m_Layer: 6
   m_Name: Hole
   m_TagString: Untagged
@@ -545,23 +593,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 512901724}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &512901727
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512901724}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &525643203
 GameObject:
@@ -573,7 +608,6 @@ GameObject:
   m_Component:
   - component: {fileID: 525643204}
   - component: {fileID: 525643205}
-  - component: {fileID: 525643206}
   m_Layer: 6
   m_Name: Hole
   m_TagString: Untagged
@@ -604,23 +638,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 525643203}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &525643206
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 525643203}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &596185489
 GameObject:
@@ -632,7 +653,6 @@ GameObject:
   m_Component:
   - component: {fileID: 596185490}
   - component: {fileID: 596185491}
-  - component: {fileID: 596185492}
   m_Layer: 6
   m_Name: 'Hole '
   m_TagString: Untagged
@@ -663,23 +683,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596185489}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &596185492
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 596185489}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &629729026
 GameObject:
@@ -691,7 +698,7 @@ GameObject:
   m_Component:
   - component: {fileID: 629729027}
   - component: {fileID: 629729028}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 'Border '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -726,6 +733,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: -0.5, y: 0, z: 0}
+--- !u!1 &674900098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 674900099}
+  m_Layer: 0
+  m_Name: VisiblePoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &674900099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674900098}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 312382249}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &757606592
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,7 +774,7 @@ GameObject:
   m_Component:
   - component: {fileID: 757606593}
   - component: {fileID: 757606594}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 'Border '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,7 +819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 829737413}
   - component: {fileID: 829737414}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +864,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1167629287}
   - component: {fileID: 1167629288}
-  - component: {fileID: 1167629289}
   m_Layer: 6
   m_Name: Hole
   m_TagString: Untagged
@@ -857,23 +894,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1167629286}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &1167629289
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1167629286}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1222394953
 GameObject:
@@ -885,7 +909,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1222394954}
   - component: {fileID: 1222394955}
-  - component: {fileID: 1222394956}
   m_Layer: 6
   m_Name: 'Hole '
   m_TagString: Untagged
@@ -916,23 +939,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1222394953}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &1222394956
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222394953}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1382217664
 GameObject:
@@ -1232,7 +1242,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1958355490}
   - component: {fileID: 1958355491}
-  - component: {fileID: 1958355492}
   m_Layer: 6
   m_Name: Hole
   m_TagString: Untagged
@@ -1263,21 +1272,8 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958355489}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &1958355492
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958355489}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

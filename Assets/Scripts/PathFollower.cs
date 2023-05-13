@@ -4,36 +4,32 @@ using UnityEngine;
 public class PathFollower : MonoBehaviour
 {
     #region Components
+    private PathCalculator pathCalculator;
     #endregion
 
     #region Variables
     private Coroutine followRoutine;
-    private Path currentPath;
+    private bool isFollowing;
+    #endregion
+
+    #region Properties
+    public bool IsFollowing => isFollowing;
+    private Path CurrentPath => pathCalculator.CurentPath;
     #endregion
 
     private void OnEnable()
     {
-        EventManager.StartListening(EventKeys.OnPathCalculateCompleted, GetCalculatedPath);
+        EventManager.StartListening(EventKeys.OnStartFollowPath, FollowPath);
     }
 
     private void OnDisable()
     {
-        EventManager.StopListening(EventKeys.OnPathCalculateCompleted, GetCalculatedPath);
+        EventManager.StopListening(EventKeys.OnStartFollowPath, FollowPath);
     }
 
-    void Start()
+    private void Awake()
     {
-
-    }
-
-    void Update()
-    {
-
-    }
-
-    private void GetCalculatedPath(object[] obj = null)
-    {
-        currentPath = (Path)obj[0];
+        pathCalculator = GetComponent<PathCalculator>();
     }
 
     private void FollowPath(object[] obj = null)
@@ -46,28 +42,32 @@ public class PathFollower : MonoBehaviour
     {
         if(followRoutine != null)
             StopCoroutine(followRoutine);
+        isFollowing = false;
     }
 
     private IEnumerator FollowRoutine()
     {
-        float baseSpeedFactor = currentPath.pathDistance / 4;
+        float baseSpeedFactor = CurrentPath.pathDistance / 4;
 
         float currentSpeed = 4 * baseSpeedFactor;
         float minSpeed = baseSpeedFactor / 6;
 
         Vector3 targetDirection;
 
-        for (int i = 0; i < currentPath.pathPositions.Count - 1; i++)
+        isFollowing = true;
+
+        for (int i = 0; i < CurrentPath.pathPositions.Count - 1; i++)
         {
-            while ((transform.position - currentPath.pathPositions[i + 1]).sqrMagnitude > 0.001f)
+            while ((transform.position - CurrentPath.pathPositions[i + 1]).sqrMagnitude > 0.001f)
             {
 
-                targetDirection = (currentPath.pathPositions[i + 1] - transform.position).normalized;
+                targetDirection = (CurrentPath.pathPositions[i + 1] - transform.position).normalized;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetDirection), 1080 * Time.deltaTime);
                 currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime));
-                transform.position = Vector3.MoveTowards(transform.position, currentPath.pathPositions[i + 1], currentSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, CurrentPath.pathPositions[i + 1], currentSpeed * Time.deltaTime);
                 yield return null;
             }
         }
+        StopFollow();
     }
 }

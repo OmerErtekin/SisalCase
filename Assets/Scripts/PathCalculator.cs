@@ -10,10 +10,14 @@ public class PathCalculator : MonoBehaviour
     [SerializeField] private int maxBounceCount = 6;
     [SerializeField] private LayerMask targetMasks;
     [SerializeField] private int holeLayerIndex;
-    private Path calculatedPath;
+    public Path calculatedPath;
 
     private Vector3 lastDirection, lastPosition;
     private float lastDistance;
+    #endregion
+
+    #region Properties
+    public Path CurentPath => calculatedPath;
     #endregion
 
     private void OnEnable()
@@ -33,9 +37,9 @@ public class PathCalculator : MonoBehaviour
 
     private void CalculatePath(object[] obj = null)
     {
-        Vector3 start = (Vector3)obj[0];
-        Vector3 direction = (Vector3)obj[1];
-        float targetDistance = (float)obj[2];
+        Vector3 start = transform.position;
+        Vector3 direction = transform.forward;
+        float targetDistance = (float)obj[0];
 
         if (IsAlreadyCalculated(start, direction, targetDistance)) return;
 
@@ -79,18 +83,21 @@ public class PathCalculator : MonoBehaviour
     {
         if (hit.distance > remainingDistance)
         {
+            calculatedPath.pathDistance += remainingDistance;
             AddRemainingPoints(ray, remainingDistance);
             return 0;
         }
 
         float segmentLength = Vector3.Distance(ray.origin, hit.point);
         AddSegmentPoints(ray, hit.point, segmentLength);
+
+        calculatedPath.pathDistance += segmentLength;
+
         if (hit.transform.gameObject.layer == holeLayerIndex)
         {
             return 0;
         }
 
-        calculatedPath.pathDistance += segmentLength;
         return remainingDistance - segmentLength;
     }
 

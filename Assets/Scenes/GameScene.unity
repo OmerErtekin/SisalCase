@@ -177,10 +177,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 236728772}
+  - component: {fileID: 236728779}
   - component: {fileID: 236728773}
   - component: {fileID: 236728775}
+  - component: {fileID: 236728778}
   - component: {fileID: 236728774}
-  - component: {fileID: 236728776}
+  - component: {fileID: 236728777}
   m_Layer: 0
   m_Name: WhiteBall
   m_TagString: Untagged
@@ -196,7 +198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 236728768}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.075, z: 0}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -216,9 +218,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3826933597e58fd4f81988027b242fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationPerSecond: {x: 0, y: 10, z: 0}
   minPower: 1
   maxPower: 10
+  powerMagnitude: 0
 --- !u!135 &236728774
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -230,7 +232,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.35
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &236728775
 MonoBehaviour:
@@ -244,7 +246,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad439b3e07f940c4481e9d3c2418d743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &236728776
+--- !u!54 &236728777
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236728768}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 1
+--- !u!114 &236728778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -253,19 +271,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 236728768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0139152ffb17e9a48b5194bb0f69a6ed, type: 3}
+  m_Script: {fileID: 11500000, guid: c40dada0978fba94fa9f46c230471353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testTransform: {fileID: 0}
-  pathResolution: 0.25
-  maxBounceCount: 6
-  targetMasks:
-    serializedVersion: 2
-    m_Bits: 192
-  holeLayerIndex: 6
-  calculatedPath:
-    pathDistance: 0
-    pathPositions: []
+--- !u!114 &236728779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236728768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2124383e1a120a04f91fcf3ae4ebf2a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballModel: {fileID: 1228448178444833819}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +341,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1.5
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -511,7 +532,7 @@ GameObject:
   - component: {fileID: 512901726}
   m_Layer: 6
   m_Name: Hole
-  m_TagString: Untagged
+  m_TagString: Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -542,7 +563,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &525643203
 GameObject:
@@ -556,7 +577,7 @@ GameObject:
   - component: {fileID: 525643205}
   m_Layer: 6
   m_Name: Hole
-  m_TagString: Untagged
+  m_TagString: Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -587,7 +608,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &596185489
 GameObject:
@@ -601,7 +622,7 @@ GameObject:
   - component: {fileID: 596185491}
   m_Layer: 6
   m_Name: 'Hole '
-  m_TagString: Untagged
+  m_TagString: Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -632,7 +653,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &629729026
 GameObject:
@@ -812,7 +833,7 @@ GameObject:
   - component: {fileID: 1167629288}
   m_Layer: 6
   m_Name: Hole
-  m_TagString: Untagged
+  m_TagString: Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -843,7 +864,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1222394953
 GameObject:
@@ -857,7 +878,7 @@ GameObject:
   - component: {fileID: 1222394955}
   m_Layer: 6
   m_Name: 'Hole '
-  m_TagString: Untagged
+  m_TagString: Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -888,7 +909,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1382217664
 GameObject:
@@ -1050,10 +1071,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1440935508}
+  - component: {fileID: 1440935509}
   - component: {fileID: 1440935507}
   - component: {fileID: 1440935506}
   m_Layer: 0
-  m_Name: PathDrawer
+  m_Name: PathHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1103,6 +1125,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1440935509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440935505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0139152ffb17e9a48b5194bb0f69a6ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathResolution: 0.25
+  maxBounceCount: 6
+  targetMasks:
+    serializedVersion: 2
+    m_Bits: 192
+  holeLayerIndex: 6
 --- !u!1 &1584324339
 GameObject:
   m_ObjectHideFlags: 0
@@ -1284,7 +1324,7 @@ GameObject:
   - component: {fileID: 1958355491}
   m_Layer: 6
   m_Name: Hole
-  m_TagString: Untagged
+  m_TagString: Hole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1315,7 +1355,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2092275836
 GameObject:

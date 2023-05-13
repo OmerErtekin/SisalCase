@@ -86,12 +86,3 @@ public class EventManager : MonoBehaviour
         }
     }
 }
-
-public enum EventKeys
-{
-    OnWhiteBallClicked,
-    OnPathCalculateRequested,
-    OnPathCalculateCompleted,
-    OnStartFollowPath,
-    OnFinishFollowPath,
-}

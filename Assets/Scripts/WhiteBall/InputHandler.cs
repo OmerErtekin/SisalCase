@@ -3,23 +3,24 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
     #region Components
+    private Camera mainCamera;
     private PathFollower pathFollower;
     #endregion
 
     #region Variables
-    [SerializeField] private Vector3 rotationPerSecond = new();
     [SerializeField] private float minPower = 1, maxPower = 10;
     private bool isOnTheBall = false;
-    private float powerMagnitude, distance;
-    private Vector3 touchPosition;
+    public float powerMagnitude;
+    private Vector3 realWorldFirstTouch, realWorldCurrent, currentDirection;
     #endregion
 
     #region Properties
     private bool IsMoving => pathFollower.IsFollowing;
-    public float PowerPercantage => distance / maxPower;
+    public float PowerPercantage => powerMagnitude / maxPower;
     #endregion
     private void Awake()
     {
+        mainCamera = Camera.main;
         pathFollower = GetComponent<PathFollower>();
     }
 
@@ -31,21 +32,25 @@ public class InputHandler : MonoBehaviour
 
     private void RotateBallWhileDragging()
     {
-        transform.Rotate(rotationPerSecond * Time.deltaTime);
-        EventManager.TriggerEvent(EventKeys.OnPathCalculateRequested, new object[] { distance });
+        EventManager.TriggerEvent(EventKeys.OnPathCalculateRequested, new object[] { transform.position, currentDirection, powerMagnitude });
     }
 
     private void OnMouseDown()
     {
         isOnTheBall = true;
-        touchPosition = Input.mousePosition;
+        realWorldFirstTouch = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        realWorldFirstTouch.y = 0;
     }
 
     private void OnMouseDrag()
     {
         if (!isOnTheBall) return;
-        powerMagnitude = (Input.mousePosition - touchPosition).magnitude / 50;
-        distance = Mathf.Clamp(powerMagnitude, minPower, maxPower);
+        realWorldCurrent = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        realWorldCurrent.y = 0;
+
+        powerMagnitude = (realWorldCurrent - realWorldFirstTouch).sqrMagnitude * 4;
+        powerMagnitude = Mathf.Clamp(powerMagnitude, minPower, maxPower);
+        currentDirection = (realWorldFirstTouch - realWorldCurrent).normalized;
     }
 
     private void OnMouseUp()
@@ -53,6 +58,6 @@ public class InputHandler : MonoBehaviour
         if (!isOnTheBall) return;
 
         isOnTheBall = false;
-        EventManager.TriggerEvent(EventKeys.OnStartFollowPath);
+        EventManager.TriggerEvent(EventKeys.OnStartFollowPath, new object[] { powerMagnitude });
     }
 }

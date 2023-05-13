@@ -5,15 +5,11 @@ using UnityEngine;
 public class PathCalculator : MonoBehaviour
 {
     #region Variables
-    public Transform testTransform;
     [SerializeField] private float pathResolution = 0.25f;
     [SerializeField] private int maxBounceCount = 6;
     [SerializeField] private LayerMask targetMasks;
     [SerializeField] private int holeLayerIndex;
-    public Path calculatedPath;
-
-    private Vector3 lastDirection, lastPosition;
-    private float lastDistance;
+    private Path calculatedPath = new();
     #endregion
 
     #region Properties
@@ -27,27 +23,15 @@ public class PathCalculator : MonoBehaviour
 
     private void OnDisable()
     {
-
-    }
-
-    private void Awake()
-    {
-        calculatedPath = new();
+        EventManager.StopListening(EventKeys.OnPathCalculateRequested, CalculatePath);
     }
 
     private void CalculatePath(object[] obj = null)
     {
-        Vector3 start = transform.position;
-        Vector3 direction = transform.forward;
-        float targetDistance = (float)obj[0];
-
-        if (IsAlreadyCalculated(start, direction, targetDistance)) return;
-
-
+        Vector3 start = (Vector3)obj[0];
+        Vector3 direction = (Vector3)obj[1];
+        float targetDistance = (float)obj[2];
         ResetPath();
-        lastPosition = start;
-        lastDirection = direction;
-        lastDistance = targetDistance;
 
         Ray ray = new(start, direction);
         float remainingDistance = targetDistance;
@@ -119,11 +103,6 @@ public class PathCalculator : MonoBehaviour
             Vector3 position = ray.GetPoint(j * pathResolution);
             calculatedPath.pathPositions.Add(position);
         }
-    }
-
-    private bool IsAlreadyCalculated(Vector3 position, Vector3 direction, float distance)
-    {
-        return lastPosition == position && lastDirection == direction && lastDistance == distance;
     }
 }
 [System.Serializable]

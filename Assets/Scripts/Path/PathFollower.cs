@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PathFollower : MonoBehaviour
@@ -10,21 +11,25 @@ public class PathFollower : MonoBehaviour
     #region Variables
     private Coroutine followRoutine;
     private bool isFollowing;
+    private Path currentPath;
     #endregion
 
     #region Properties
     public bool IsFollowing => isFollowing;
-    private Path CurrentPath => pathCalculator.CurentPath;
     #endregion
 
     private void OnEnable()
     {
         EventManager.StartListening(EventKeys.OnStartFollowPath, FollowPath);
+        EventManager.StartListening(EventKeys.OnEnteredHole, StopFollow);
+        EventManager.StartListening(EventKeys.OnPathCalculateCompleted, SetCurrentPath);
     }
 
     private void OnDisable()
     {
         EventManager.StopListening(EventKeys.OnStartFollowPath, FollowPath);
+        EventManager.StopListening(EventKeys.OnEnteredHole, StopFollow);
+        EventManager.StopListening(EventKeys.OnPathCalculateCompleted, SetCurrentPath);
     }
 
     private void Awake()
@@ -35,19 +40,21 @@ public class PathFollower : MonoBehaviour
     private void FollowPath(object[] obj = null)
     {
         StopFollow();
-        followRoutine = StartCoroutine(FollowRoutine());
+        followRoutine = StartCoroutine(FollowRoutine((float)obj[0]));
     }
 
     private void StopFollow(object[] obj = null)
     {
-        if(followRoutine != null)
+        if (followRoutine != null)
             StopCoroutine(followRoutine);
         isFollowing = false;
     }
 
-    private IEnumerator FollowRoutine()
+    private void SetCurrentPath(object[] obj = null) => currentPath = (Path)obj[0];
+
+    private IEnumerator FollowRoutine(float hitMagnitude)
     {
-        float baseSpeedFactor = CurrentPath.pathDistance / 4;
+        float baseSpeedFactor = hitMagnitude / 4;
 
         float currentSpeed = 4 * baseSpeedFactor;
         float minSpeed = baseSpeedFactor / 6;
@@ -56,15 +63,15 @@ public class PathFollower : MonoBehaviour
 
         isFollowing = true;
 
-        for (int i = 0; i < CurrentPath.pathPositions.Count - 1; i++)
+        for (int i = 0; i < currentPath.pathPositions.Count - 1; i++)
         {
-            while ((transform.position - CurrentPath.pathPositions[i + 1]).sqrMagnitude > 0.001f)
+            while ((transform.position - currentPath.pathPositions[i + 1]).sqrMagnitude > 0.001f)
             {
 
-                targetDirection = (CurrentPath.pathPositions[i + 1] - transform.position).normalized;
+                targetDirection = (currentPath.pathPositions[i + 1] - transform.position).normalized;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetDirection), 1080 * Time.deltaTime);
-                currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime * 1.1f));
-                transform.position = Vector3.MoveTowards(transform.position, CurrentPath.pathPositions[i + 1], currentSpeed * Time.deltaTime);
+                currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime));
+                transform.position = Vector3.MoveTowards(transform.position, currentPath.pathPositions[i + 1], currentSpeed * Time.deltaTime);
                 yield return null;
             }
         }

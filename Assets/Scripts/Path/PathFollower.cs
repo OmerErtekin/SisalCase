@@ -11,7 +11,7 @@ public class PathFollower : MonoBehaviour
     #region Variables
     private Coroutine followRoutine;
     private bool isFollowing;
-    private Path currentPath;
+    private BallPath currentPath;
     #endregion
 
     #region Properties
@@ -50,7 +50,7 @@ public class PathFollower : MonoBehaviour
         isFollowing = false;
     }
 
-    private void SetCurrentPath(object[] obj = null) => currentPath = (Path)obj[0];
+    private void SetCurrentPath(object[] obj = null) => currentPath = (BallPath)obj[0];
 
     private IEnumerator FollowRoutine(float hitMagnitude)
     {

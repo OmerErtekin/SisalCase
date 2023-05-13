@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class InputHandler : MonoBehaviour
@@ -8,6 +9,7 @@ public class InputHandler : MonoBehaviour
     #endregion
 
     #region Variables
+    [SerializeField] private Transform stickModel,stickCenter;
     [SerializeField] private float minPower = 1, maxPower = 10;
     private bool isOnTheBall = false;
     public float powerMagnitude;
@@ -51,6 +53,7 @@ public class InputHandler : MonoBehaviour
         powerMagnitude = (realWorldCurrent - realWorldFirstTouch).sqrMagnitude * 4;
         powerMagnitude = Mathf.Clamp(powerMagnitude, minPower, maxPower);
         currentDirection = (realWorldFirstTouch - realWorldCurrent).normalized;
+        SetStickPositionAndRotation();
     }
 
     private void OnMouseUp()
@@ -58,6 +61,24 @@ public class InputHandler : MonoBehaviour
         if (!isOnTheBall) return;
 
         isOnTheBall = false;
-        EventManager.TriggerEvent(EventKeys.OnStartFollowPath, new object[] { powerMagnitude });
+        HitWithStick();
+    }
+
+    private void SetStickPositionAndRotation()
+    {
+        stickModel.gameObject.SetActive(true);
+        if (currentDirection != Vector3.zero)
+            stickCenter.rotation = Quaternion.LookRotation(currentDirection);
+        stickCenter.Rotate(0, -90, 0);
+        stickModel.transform.localPosition = new Vector3(-powerMagnitude / 2, 0, 0);
+    }
+
+    private void HitWithStick()
+    {
+        stickModel.DOLocalMoveX(0.5f, 0.5f).SetTarget(this).SetEase(Ease.InBack).OnComplete(()=>
+        {
+            stickModel.gameObject.SetActive(false);
+            EventManager.TriggerEvent(EventKeys.OnStartFollowPath, new object[] { powerMagnitude });
+        });
     }
 }

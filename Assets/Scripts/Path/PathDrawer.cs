@@ -9,7 +9,7 @@ public class PathDrawer : MonoBehaviour
     #endregion
 
     #region Variables
-    private Path path;
+    private BallPath path;
     private List<VisiblePoint> points = new();
     #endregion
     private void OnEnable()
@@ -32,7 +32,7 @@ public class PathDrawer : MonoBehaviour
     private void DrawPath(object[] obj = null)
     {
         HidePath();
-        path = (Path)obj[0];
+        path = (BallPath)obj[0];
         VisiblePoint point;
         for (int i = 0; i < path.pathPositions.Count; i++)
         {

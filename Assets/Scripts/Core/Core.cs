@@ -20,4 +20,5 @@ public enum EventKeys
     OnFinishFollowPath,
     OnEnteredHole,
     OnCollidedWithBall,
+    OnStickReleased,
 }

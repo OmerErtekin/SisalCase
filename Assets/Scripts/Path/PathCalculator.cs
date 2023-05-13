@@ -9,11 +9,11 @@ public class PathCalculator : MonoBehaviour
     [SerializeField] private int maxBounceCount = 6;
     [SerializeField] private LayerMask targetMasks;
     [SerializeField] private int holeLayerIndex;
-    private Path calculatedPath = new();
+    private BallPath calculatedPath = new();
     #endregion
 
     #region Properties
-    public Path CurentPath => calculatedPath;
+    public BallPath CurentPath => calculatedPath;
     #endregion
 
     private void OnEnable()
@@ -106,7 +106,7 @@ public class PathCalculator : MonoBehaviour
     }
 }
 [System.Serializable]
-public class Path
+public class BallPath
 {
     public float pathDistance;
     public List<Vector3> pathPositions = new();

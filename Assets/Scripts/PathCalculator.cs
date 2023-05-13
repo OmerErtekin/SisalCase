@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PathCalculator : MonoBehaviour
 {
-    #region Components
-    private PointPool pointPool;
-    #endregion
     #region Variables
     public Transform testTransform;
     [SerializeField] private float pathResolution = 0.25f;
@@ -14,33 +11,41 @@ public class PathCalculator : MonoBehaviour
     [SerializeField] private LayerMask targetMasks;
     [SerializeField] private int holeLayerIndex;
     private Path calculatedPath;
-    private List<VisiblePoint> drawedPoints = new();
 
-    private Vector3 lastDirection,lastPosition;
+    private Vector3 lastDirection, lastPosition;
     private float lastDistance;
     #endregion
 
+    private void OnEnable()
+    {
+        EventManager.StartListening(EventKeys.OnPathCalculateRequested, CalculatePath);
+    }
+
+    private void OnDisable()
+    {
+
+    }
+
     private void Awake()
     {
-        pointPool = GetComponent<PointPool>();
         calculatedPath = new();
     }
 
-    private void FixedUpdate()
+    private void CalculatePath(object[] obj = null)
     {
-        CalculatePath(testTransform.position, testTransform.forward, 10);
-    }
+        Vector3 start = (Vector3)obj[0];
+        Vector3 direction = (Vector3)obj[1];
+        float targetDistance = (float)obj[2];
 
-    private Path CalculatePath(Vector3 start, Vector3 direction, float targetDistance)
-    {
-        if (IsAlreadyCalculated(start, direction, targetDistance)) return calculatedPath;
+        if (IsAlreadyCalculated(start, direction, targetDistance)) return;
+
 
         ResetPath();
         lastPosition = start;
         lastDirection = direction;
         lastDistance = targetDistance;
 
-        Ray ray = new(start, direction);    
+        Ray ray = new(start, direction);
         float remainingDistance = targetDistance;
 
         for (int i = 0; i < maxBounceCount; i++)
@@ -61,16 +66,13 @@ public class PathCalculator : MonoBehaviour
             }
         }
 
-        return calculatedPath;
+        EventManager.TriggerEvent(EventKeys.OnPathCalculateCompleted, new object[] { calculatedPath });
     }
 
     private void ResetPath()
     {
         calculatedPath.pathDistance = 0;
         calculatedPath.pathPositions.Clear();
-
-        HideDrawedPath();
-        drawedPoints.Clear();
     }
 
     private float HandleRaycastHit(RaycastHit hit, Ray ray, float remainingDistance)
@@ -97,8 +99,8 @@ public class PathCalculator : MonoBehaviour
         int segmentPoints = Mathf.FloorToInt(segmentLength / pathResolution);
         for (int j = 1; j <= segmentPoints; j++)
         {
-            Vector3 point = Vector3.Lerp(ray.origin, hitPoint, (float)j / segmentPoints);
-            AddPointToPath(point);
+            Vector3 position = Vector3.Lerp(ray.origin, hitPoint, (float)j / segmentPoints);
+            calculatedPath.pathPositions.Add(position);
         }
     }
 
@@ -107,28 +109,12 @@ public class PathCalculator : MonoBehaviour
         int remainingPoints = Mathf.FloorToInt(remainingDistance / pathResolution);
         for (int j = 1; j <= remainingPoints - 2; j++)
         {
-            Vector3 point = ray.GetPoint(j * pathResolution);
-            AddPointToPath(point);
+            Vector3 position = ray.GetPoint(j * pathResolution);
+            calculatedPath.pathPositions.Add(position);
         }
     }
 
-    private void AddPointToPath(Vector3 pointPosition)
-    {
-        calculatedPath.pathPositions.Add(pointPosition);
-        var visiblePoint = pointPool.GetPoint();
-        visiblePoint.ShowPoint(pointPosition);
-        drawedPoints.Add(visiblePoint);
-    }
-
-    private void HideDrawedPath()
-    {
-        for (int i = 0; i < drawedPoints.Count; i++)
-        {
-            drawedPoints[i].HidePoint();
-        }
-    }
-
-    private bool IsAlreadyCalculated(Vector3 position,Vector3 direction,float distance)
+    private bool IsAlreadyCalculated(Vector3 position, Vector3 direction, float distance)
     {
         return lastPosition == position && lastDirection == direction && lastDistance == distance;
     }

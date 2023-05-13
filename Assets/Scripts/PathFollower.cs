@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PathFollower : MonoBehaviour
@@ -12,24 +10,39 @@ public class PathFollower : MonoBehaviour
     private Coroutine followRoutine;
     private Path currentPath;
     #endregion
+
+    private void OnEnable()
+    {
+        EventManager.StartListening(EventKeys.OnPathCalculateCompleted, GetCalculatedPath);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.StopListening(EventKeys.OnPathCalculateCompleted, GetCalculatedPath);
+    }
+
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        
+
     }
 
-    private void FollowPath(Path pathToFollow)
+    private void GetCalculatedPath(object[] obj = null)
+    {
+        currentPath = (Path)obj[0];
+    }
+
+    private void FollowPath(object[] obj = null)
     {
         StopFollow();
-        currentPath = pathToFollow;
         followRoutine = StartCoroutine(FollowRoutine());
     }
 
-    private void StopFollow()
+    private void StopFollow(object[] obj = null)
     {
         if(followRoutine != null)
             StopCoroutine(followRoutine);

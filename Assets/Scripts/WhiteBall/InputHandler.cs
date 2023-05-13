@@ -59,7 +59,6 @@ public class InputHandler : MonoBehaviour
     private void OnMouseUp()
     {
         if (!isOnTheBall) return;
-
         isOnTheBall = false;
         HitWithStick();
     }
@@ -75,10 +74,11 @@ public class InputHandler : MonoBehaviour
 
     private void HitWithStick()
     {
-        stickModel.DOLocalMoveX(0.5f, 0.5f).SetTarget(this).SetEase(Ease.InBack).OnComplete(()=>
+        stickModel.DOKill();
+        stickModel.DOLocalMoveX(0f, 0.5f).SetTarget(this).SetEase(Ease.InBack).OnComplete(()=>
         {
-            stickModel.gameObject.SetActive(false);
             EventManager.TriggerEvent(EventKeys.OnStartFollowPath, new object[] { powerMagnitude });
+            stickModel.gameObject.SetActive(false);
         });
     }
 }

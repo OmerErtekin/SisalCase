@@ -70,11 +70,13 @@ public class PathFollower : MonoBehaviour
 
                 targetDirection = (currentPath.pathPositions[i + 1] - transform.position).normalized;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetDirection), 1080 * Time.deltaTime);
-                currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime));
+                currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime * 1.05f));
                 transform.position = Vector3.MoveTowards(transform.position, currentPath.pathPositions[i + 1], currentSpeed * Time.deltaTime);
                 yield return null;
             }
         }
+
+        EventManager.TriggerEvent(EventKeys.OnFinishFollowPath);
         StopFollow();
     }
 }

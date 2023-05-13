@@ -57,7 +57,7 @@ public class PathFollower : MonoBehaviour
         float baseSpeedFactor = hitMagnitude / 4;
 
         float currentSpeed = 4 * baseSpeedFactor;
-        float minSpeed = baseSpeedFactor / 6;
+        float minSpeed = baseSpeedFactor / 8;
 
         Vector3 targetDirection;
 

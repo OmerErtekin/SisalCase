@@ -343,7 +343,6 @@ MonoBehaviour:
   stickCenter: {fileID: 367725152}
   minPower: 1
   maxPower: 12
-  powerMagnitude: 0
 --- !u!135 &236728774
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1908,7 +1907,7 @@ MonoBehaviour:
   pointPrefab: {fileID: 9211408115512019656, guid: b9851cc8cef801044b92d95f5abef5a6,
     type: 3}
   parentTransform: {fileID: 674900099}
-  initialPoolSize: 50
+  initialPoolSize: 20
 --- !u!114 &1440935507
 MonoBehaviour:
   m_ObjectHideFlags: 0

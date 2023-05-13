@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WhiteBall : MonoBehaviour
+public class InputHandler : MonoBehaviour
 {
     #region Components
     private PathFollower pathFollower;
@@ -8,14 +8,15 @@ public class WhiteBall : MonoBehaviour
 
     #region Variables
     [SerializeField] private Vector3 rotationPerSecond = new();
-    public float distance = 10;
+    [SerializeField] private float minPower = 1, maxPower = 10;
     private bool isOnTheBall = false;
+    private float powerMagnitude, distance;
     private Vector3 touchPosition;
-    public float magnitude;
     #endregion
 
     #region Properties
     private bool IsMoving => pathFollower.IsFollowing;
+    public float PowerPercantage => distance / maxPower;
     #endregion
     private void Awake()
     {
@@ -24,9 +25,14 @@ public class WhiteBall : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (IsMoving) return;
+        if (IsMoving || !isOnTheBall) return;
+        RotateBallWhileDragging();
+    }
+
+    private void RotateBallWhileDragging()
+    {
         transform.Rotate(rotationPerSecond * Time.deltaTime);
-        EventManager.TriggerEvent(EventKeys.OnPathCalculateRequested,new object[] {distance});
+        EventManager.TriggerEvent(EventKeys.OnPathCalculateRequested, new object[] { distance });
     }
 
     private void OnMouseDown()
@@ -38,7 +44,8 @@ public class WhiteBall : MonoBehaviour
     private void OnMouseDrag()
     {
         if (!isOnTheBall) return;
-        magnitude = (Input.mousePosition - touchPosition).magnitude;
+        powerMagnitude = (Input.mousePosition - touchPosition).magnitude / 50;
+        distance = Mathf.Clamp(powerMagnitude, minPower, maxPower);
     }
 
     private void OnMouseUp()

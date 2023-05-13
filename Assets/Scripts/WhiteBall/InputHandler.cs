@@ -9,10 +9,10 @@ public class InputHandler : MonoBehaviour
     #endregion
 
     #region Variables
-    [SerializeField] private Transform stickModel,stickCenter;
+    [SerializeField] private Transform stickModel, stickCenter;
     [SerializeField] private float minPower = 1, maxPower = 10;
-    private bool isOnTheBall = false;
-    public float powerMagnitude;
+    private bool isOnTheBall = false, isHitting = false;
+    private float powerMagnitude;
     private Vector3 realWorldFirstTouch, realWorldCurrent, currentDirection;
     #endregion
 
@@ -20,6 +20,7 @@ public class InputHandler : MonoBehaviour
     private bool IsMoving => pathFollower.IsFollowing;
     public float PowerPercantage => powerMagnitude / maxPower;
     #endregion
+
     private void Awake()
     {
         mainCamera = Camera.main;
@@ -28,7 +29,7 @@ public class InputHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (IsMoving || !isOnTheBall) return;
+        if (IsMoving || !isOnTheBall || isHitting) return;
         RotateBallWhileDragging();
     }
 
@@ -39,6 +40,7 @@ public class InputHandler : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (isHitting) return;
         isOnTheBall = true;
         realWorldFirstTouch = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         realWorldFirstTouch.y = 0;
@@ -46,7 +48,8 @@ public class InputHandler : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!isOnTheBall) return;
+        if (!isOnTheBall || isHitting) return;
+
         realWorldCurrent = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         realWorldCurrent.y = 0;
 
@@ -58,8 +61,9 @@ public class InputHandler : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (!isOnTheBall) return;
+        if (!isOnTheBall || isHitting) return;
         isOnTheBall = false;
+        isHitting = true;
         HitWithStick();
     }
 
@@ -75,10 +79,11 @@ public class InputHandler : MonoBehaviour
     private void HitWithStick()
     {
         stickModel.DOKill();
-        stickModel.DOLocalMoveX(0f, 0.5f).SetTarget(this).SetEase(Ease.InBack).OnComplete(()=>
+        stickModel.DOLocalMoveX(0f, 0.5f).SetTarget(this).SetEase(Ease.InBack).OnComplete(() =>
         {
             EventManager.TriggerEvent(EventKeys.OnStartFollowPath, new object[] { powerMagnitude });
             stickModel.gameObject.SetActive(false);
+            isHitting = false;
         });
     }
 }

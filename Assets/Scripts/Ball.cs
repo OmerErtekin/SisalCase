@@ -40,7 +40,11 @@ public class Ball : MonoBehaviour
     {
         ballCollider.enabled = false;
         ballmodel.transform.DOKill();
-        ballmodel.transform.DOScale(0, 0.25f).SetTarget(this).OnComplete(() => ballmodel.SetActive(false));
+        ballmodel.transform.DOScale(0, 0.25f).SetTarget(this).OnComplete(() =>
+        {
+            ballmodel.SetActive(false);
+            transform.position = Vector3.one * 100;
+        });
     }
 
     public void EnableBall(Vector3 newPosition)

@@ -10,10 +10,10 @@ public class BallDistrubuter : MonoBehaviour
     #endregion
 
     #region Variables
-    [SerializeField] private float maxX, minX, maxZ, minZ;
+    [SerializeField] private float xRange, zRange;
     [SerializeField] private float minRequiredDistance = 0.75f;
     [SerializeField] private List<Ball> balls = new();
-    [SerializeField] private List<Ball> disabledBalls = new();
+    private List<Ball> disabledBalls = new();
     #endregion
 
     private void OnEnable()
@@ -40,7 +40,7 @@ public class BallDistrubuter : MonoBehaviour
             StartCoroutine(SetBallToRandomPosition(balls[i]));
         }
     }
-    
+
 
     private void AddBallToDisabled(object[] obj = null)
     {
@@ -49,7 +49,7 @@ public class BallDistrubuter : MonoBehaviour
 
     private void SetDisabledBalls(object[] obj = null)
     {
-        for(int i = 0;i< disabledBalls.Count; i++)
+        for (int i = 0; i < disabledBalls.Count; i++)
         {
             StartCoroutine(SetBallToRandomPosition(disabledBalls[i]));
         }
@@ -58,20 +58,20 @@ public class BallDistrubuter : MonoBehaviour
 
     private IEnumerator SetBallToRandomPosition(Ball ball)
     {
-        Vector3 randomPosition = new Vector3(Random.Range(minX,maxX),0.075f,Random.Range(minZ,maxZ));
+        Vector3 randomPosition = new Vector3(Random.Range(-xRange / 2, xRange / 2), 0.075f, Random.Range(-zRange / 2, zRange / 2));
 
-        while(IsThereAnyCloseBall(randomPosition,ball))
+        while (IsThereAnyCloseBall(randomPosition, ball))
         {
-            randomPosition = new Vector3(Random.Range(minX, maxX), 0.075f, Random.Range(minZ, maxZ));
+            randomPosition = new Vector3(Random.Range(-xRange / 2, xRange / 2), 0.075f, Random.Range(-zRange / 2, zRange / 2));
             yield return null;
         }
         ball.EnableBall(randomPosition);
     }
 
 
-    private bool IsThereAnyCloseBall(Vector3 position,Ball ball)
+    private bool IsThereAnyCloseBall(Vector3 position, Ball ball)
     {
-        for(int i = 1;i<balls.Count;i++)
+        for (int i = 1; i < balls.Count; i++)
         {
             if (balls[i] == ball) continue;
 

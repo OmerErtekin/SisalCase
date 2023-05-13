@@ -10,6 +10,9 @@ public class PathCalculator : MonoBehaviour
     [SerializeField] private LayerMask targetMasks;
     [SerializeField] private int holeLayerIndex;
     private BallPath calculatedPath = new();
+
+    private Vector3 lastPos, lastDir;
+    private float lastMagnitude;
     #endregion
 
     #region Properties
@@ -31,7 +34,14 @@ public class PathCalculator : MonoBehaviour
         Vector3 start = (Vector3)obj[0];
         Vector3 direction = (Vector3)obj[1];
         float targetDistance = (float)obj[2];
+
+        if (IsAlreadyCalculated(start, direction, targetDistance)) return;
+
         ResetPath();
+
+        lastPos = start;
+        lastDir = direction;
+        lastMagnitude = targetDistance;
 
         Ray ray = new(start, direction);
         float remainingDistance = targetDistance;
@@ -103,6 +113,11 @@ public class PathCalculator : MonoBehaviour
             Vector3 position = ray.GetPoint(j * pathResolution);
             calculatedPath.pathPositions.Add(position);
         }
+    }
+
+    private bool IsAlreadyCalculated(Vector3 pos,Vector3 dir,float magnitude)
+    {
+        return pos == lastPos && dir == lastDir && magnitude == lastMagnitude;
     }
 }
 [System.Serializable]

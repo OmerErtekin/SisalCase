@@ -2367,10 +2367,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7b13b0ab5cfdb47b7987fa11af87db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxX: 2.25
-  minX: -2.25
-  maxZ: 1
-  minZ: -1
+  xRange: 4.5
+  zRange: 2
   minRequiredDistance: 0.35
   balls:
   - {fileID: 236728780}
@@ -2381,7 +2379,6 @@ MonoBehaviour:
   - {fileID: 747373766}
   - {fileID: 1113614188}
   - {fileID: 198402091}
-  disabledBalls: []
 --- !u!4 &1889043832
 Transform:
   m_ObjectHideFlags: 0

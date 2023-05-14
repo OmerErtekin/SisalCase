@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallDistrubuter : MonoBehaviour
@@ -40,7 +39,6 @@ public class BallDistrubuter : MonoBehaviour
             StartCoroutine(SetBallToRandomPosition(balls[i]));
         }
     }
-
 
     private void AddBallToDisabled(object[] obj = null)
     {

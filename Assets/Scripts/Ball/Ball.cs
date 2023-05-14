@@ -1,39 +1,64 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
     #region Components
     [SerializeField] private GameObject ballmodel;
-    private Collider ballCollider;
+    private SphereCollider ballCollider;
     #endregion
 
     #region Variables
+    [SerializeField] private float radiusAtReplacing, normalRadius;
     #endregion
 
     private void OnEnable()
     {
         EventManager.StartListening(EventKeys.OnCollidedWithBall, DisableBallWithCheck);
         EventManager.StartListening(EventKeys.OnEnteredHole, DisableBallWithCheck);
+        EventManager.StartListening(EventKeys.OnEnteredHole, ExpandColliderForReplacing);
+        EventManager.StartListening(EventKeys.OnWhiteBallReplaced, ShrinkColliderAfterReplace);
+        EventManager.StartListening(EventKeys.OnWhiteBallReplaced, EnableBallWithCheck);
     }
 
     private void OnDisable()
     {
         EventManager.StopListening(EventKeys.OnCollidedWithBall, DisableBallWithCheck);
         EventManager.StopListening(EventKeys.OnEnteredHole, DisableBallWithCheck);
+        EventManager.StopListening(EventKeys.OnWhiteBallReplaced, EnableBallWithCheck);
+        EventManager.StopListening(EventKeys.OnEnteredHole, ExpandColliderForReplacing);
+        EventManager.StopListening(EventKeys.OnWhiteBallReplaced, ShrinkColliderAfterReplace);
     }
 
     private void Awake()
     {
-        ballCollider = GetComponent<Collider>();
+        ballCollider = GetComponent<SphereCollider>();
     }
 
     private void DisableBallWithCheck(object[] obj = null)
     {
         if ((Ball)obj[0] != this) return;
         DisableBall();
+    }
+
+    private void ExpandColliderForReplacing(object[] obj = null)
+    {
+        //We are expanding other balls colliders to prevent white ball to collide.
+        if ((Ball)obj[0] == this) return;
+        ballCollider.radius = radiusAtReplacing;
+    }
+
+    private void ShrinkColliderAfterReplace(object[] obj = null)
+    {
+        //We reset our colliders
+        if ((Ball)obj[0] == this) return;
+        ballCollider.radius = normalRadius;
+    }
+
+    private void EnableBallWithCheck(object[] obj = null)
+    {
+        if ((Ball)obj[0] != this) return;
+        EnableBall((Vector3)obj[1]);
     }
 
     private void DisableBall()

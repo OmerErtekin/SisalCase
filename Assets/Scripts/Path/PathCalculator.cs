@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PathCalculator : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private float pathResolution = 0.25f;
+    [SerializeField] private float pathResolution = 0.25f,sphereCastRadius = 0.075f;
     [SerializeField] private int maxBounceCount = 6;
     [SerializeField] private LayerMask targetMasks;
     [SerializeField] private int holeLayerIndex;
@@ -48,7 +47,7 @@ public class PathCalculator : MonoBehaviour
 
         for (int i = 0; i < maxBounceCount; i++)
         {
-            if (Physics.Raycast(ray, out RaycastHit hit, remainingDistance, targetMasks))
+            if (Physics.SphereCast(ray,sphereCastRadius, out RaycastHit hit, remainingDistance, targetMasks))
             {
                 remainingDistance = HandleRaycastHit(hit, ray, remainingDistance);
                 if (remainingDistance <= 0) break;

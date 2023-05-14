@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PathFollower : MonoBehaviour
@@ -48,6 +47,7 @@ public class PathFollower : MonoBehaviour
         if (followRoutine != null)
             StopCoroutine(followRoutine);
         isFollowing = false;
+        EventManager.TriggerEvent(EventKeys.OnFinishFollowPath);
     }
 
     private void SetCurrentPath(object[] obj = null) => currentPath = (BallPath)obj[0];
@@ -76,7 +76,6 @@ public class PathFollower : MonoBehaviour
             }
         }
 
-        EventManager.TriggerEvent(EventKeys.OnFinishFollowPath);
         StopFollow();
     }
 }

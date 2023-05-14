@@ -19,7 +19,6 @@ public class InputHandler : MonoBehaviour
 
     #region Properties
     private bool IsMoving => pathFollower.IsFollowing;
-    public float PowerPercantage => powerMagnitude / maxPower;
     #endregion
 
     private void Awake()

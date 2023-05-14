@@ -47,7 +47,7 @@ public class WhiteBallPlacer : MonoBehaviour
 
     private void PlaceTheBall()
     {
-        if (!Input.GetMouseButtonDown(0) || !canPlace) return;
+        if (!Input.GetMouseButtonUp(0) || !canPlace) return;
 
         canPlace = false;
         isShowingGhost = false;

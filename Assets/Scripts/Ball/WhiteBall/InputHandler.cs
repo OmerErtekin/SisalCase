@@ -4,6 +4,7 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
     #region Components
+    [SerializeField] private AudioSource hitSound;
     private Camera mainCamera;
     private PathFollower pathFollower;
     #endregion
@@ -79,6 +80,7 @@ public class InputHandler : MonoBehaviour
     private void HitWithStick()
     {
         stickModel.DOKill();
+        hitSound.PlayDelayed(0.25f);
         stickModel.DOLocalMoveX(0f, 0.5f).SetTarget(this).SetEase(Ease.InBack).OnComplete(() =>
         {
             EventManager.TriggerEvent(EventKeys.OnStartFollowPath, new object[] { powerMagnitude });

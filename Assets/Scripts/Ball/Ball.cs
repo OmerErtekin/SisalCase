@@ -5,6 +5,7 @@ public class Ball : MonoBehaviour
 {
     #region Components
     [SerializeField] private GameObject ballmodel;
+    [SerializeField] private AudioSource ballSound;
     private SphereCollider ballCollider;
     #endregion
 
@@ -38,6 +39,7 @@ public class Ball : MonoBehaviour
     private void DisableBallWithCheck(object[] obj = null)
     {
         if ((Ball)obj[0] != this) return;
+        ballSound.Play();
         DisableBall();
     }
 

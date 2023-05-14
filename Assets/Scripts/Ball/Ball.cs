@@ -75,9 +75,8 @@ public class Ball : MonoBehaviour
     public void EnableBall(Vector3 newPosition)
     {
         ballmodel.transform.DOKill();
-        ballCollider.enabled = true;
         transform.position = newPosition;
         ballmodel.SetActive(true);
-        ballmodel.transform.DOScale(1, 0.5f).From(0).SetTarget(this);
+        ballmodel.transform.DOScale(1, 0.5f).From(0).SetTarget(this).OnComplete(() => ballCollider.enabled = true);
     }
 }

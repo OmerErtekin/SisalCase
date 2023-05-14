@@ -38,7 +38,6 @@ public class PathFollower : MonoBehaviour
 
     private void FollowPath(object[] obj = null)
     {
-        StopFollow();
         followRoutine = StartCoroutine(FollowRoutine((float)obj[0]));
     }
 

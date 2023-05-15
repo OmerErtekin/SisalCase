@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 
 public class SunsetAPI : MonoBehaviour
 {
-
     #region Variables
     [SerializeField] private string currentAltitude = "41.015137", currentLongitude = "28.979530";
     [SerializeField] private int maxWaitForLocation = 3;
@@ -27,7 +26,6 @@ public class SunsetAPI : MonoBehaviour
     ""status"": ""OK""
 }";
     #endregion
-
 
     void Start()
     {

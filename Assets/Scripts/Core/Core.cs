@@ -1,4 +1,3 @@
-
 public static class Core
 {
     public static class Constants
@@ -8,7 +7,6 @@ public static class Core
         public const string TAG_TABLE = "Table";
     }
 }
-
 
 public enum EventKeys
 {
@@ -24,3 +22,4 @@ public enum EventKeys
     OnAPICallCompleted,
     OnNameEntered,
 }
+

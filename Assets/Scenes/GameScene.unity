@@ -2537,6 +2537,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d54805fec6ecea428255113b21020bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentAltitude: 41.015137
+  currentLongitude: 28.979530
+  maxWaitForLocation: 3
 --- !u!1 &1092246158
 GameObject:
   m_ObjectHideFlags: 0

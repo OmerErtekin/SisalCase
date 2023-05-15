@@ -5,6 +5,7 @@ public static class Core
         public const string TAG_BALL = "Ball";
         public const string TAG_HOLE = "Hole";
         public const string TAG_TABLE = "Table";
+        public const string TAG_WALL = "Wall";
     }
 }
 

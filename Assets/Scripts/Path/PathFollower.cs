@@ -8,6 +8,7 @@ public class PathFollower : MonoBehaviour
     #endregion
 
     #region Variables
+    [SerializeField] private float speedMultiplier = 4, rotationSpeed = 1080, decreaseSpeed = 1.05f;
     private Coroutine followRoutine;
     private bool isFollowing;
     private BallPath currentPath;
@@ -53,10 +54,10 @@ public class PathFollower : MonoBehaviour
 
     private IEnumerator FollowRoutine(float hitMagnitude)
     {
-        float baseSpeedFactor = hitMagnitude / 4;
+        float baseSpeedFactor = hitMagnitude / speedMultiplier;
 
-        float currentSpeed = 4 * baseSpeedFactor;
-        float minSpeed = baseSpeedFactor / 8;
+        float currentSpeed = speedMultiplier * baseSpeedFactor;
+        float minSpeed = baseSpeedFactor / (speedMultiplier * 2);
 
         Vector3 targetDirection;
 
@@ -66,10 +67,10 @@ public class PathFollower : MonoBehaviour
         {
             while ((transform.position - currentPath.pathPositions[i + 1]).sqrMagnitude > 0.001f)
             {
-
+                //To have exponential decreasing speed i use Mathf.Exp
                 targetDirection = (currentPath.pathPositions[i + 1] - transform.position).normalized;
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetDirection), 1080 * Time.deltaTime);
-                currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime * 1.05f));
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetDirection), rotationSpeed * Time.deltaTime);
+                currentSpeed = Mathf.Max(minSpeed, currentSpeed * Mathf.Exp(-Time.deltaTime * decreaseSpeed));
                 transform.position = Vector3.MoveTowards(transform.position, currentPath.pathPositions[i + 1], currentSpeed * Time.deltaTime);
                 yield return null;
             }

@@ -39,6 +39,8 @@ public class SunsetAPI : MonoBehaviour
         if (!Input.location.isEnabledByUser)
         {
             Debug.Log("Location is not enabled! Will use default altitude and longitude");
+            //I could add Permission.RequestUserPermission(Permission.FineLocation); but i assume that the permission
+            //is taken on another script in normal game so i decided to not do that in here.
         }
         else
         {

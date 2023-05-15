@@ -167,7 +167,8 @@ public class UIManager : MonoBehaviour
 
     public void ResetButtonClicked()
     {
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteKey("HighScore");
+        PlayerPrefs.DeleteKey("PlayerName");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -71,7 +71,6 @@ public class SunsetAPI : MonoBehaviour
         DateTime sunsetUtc = DateTime.Now;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
-
             yield return webRequest.SendWebRequest();
             string selectedJsonData = webRequest.result == UnityWebRequest.Result.ConnectionError ? mockJsonData : webRequest.downloadHandler.text;
 

@@ -4912,6 +4912,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WhiteBall
       objectReference: {fileID: 0}
+    - target: {fileID: 325827966240413684, guid: e4b6c8ca646789a479d4c4fae5726e1c,
+        type: 3}
+      propertyPath: decreaseSpeed
+      value: 1.075
+      objectReference: {fileID: 0}
     - target: {fileID: 325827966240413687, guid: e4b6c8ca646789a479d4c4fae5726e1c,
         type: 3}
       propertyPath: m_RootOrder

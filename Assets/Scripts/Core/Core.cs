@@ -12,6 +12,7 @@ public static class Core
 
 public enum EventKeys
 {
+    OnGameStarted,
     OnWhiteBallReplaced,
     OnPathCalculateRequested,
     OnPathCalculateCompleted,
@@ -20,4 +21,6 @@ public enum EventKeys
     OnEnteredHole,
     OnCollidedWithBall,
     OnStickReleased,
+    OnAPICallCompleted,
+    OnNameEntered,
 }

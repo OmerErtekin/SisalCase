@@ -38,7 +38,7 @@ public class SunsetAPI : MonoBehaviour
     {
         if (!Input.location.isEnabledByUser)
         {
-            Debug.Log("Location is not enabled!. Will use default altitude and longitude");
+            Debug.Log("Location is not enabled! Will use default altitude and longitude");
         }
         else
         {
@@ -49,7 +49,7 @@ public class SunsetAPI : MonoBehaviour
                 maxWaitForLocation--;
             }
 
-            if (Input.location.status == LocationServiceStatus.Failed)
+            if (Input.location.status != LocationServiceStatus.Running)
             {
                 Debug.Log("Unable to determine device location. Will use default altitude and longitude");
             }
